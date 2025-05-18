@@ -1,426 +1,182 @@
- <!DOCTYPE html>
-<html lang="en" ng-app="SomtexAcademy">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somtex Academy</title>
-    
-    <link rel="icon" type="image/x-icon" href="https://i.imgur.com/pc8jsuz.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0052cc; color: white; }
-        .card { background: white; color: black; border-radius: 10px; padding: 20px; }
-        .ticker { white-space: nowrap; overflow: hidden; background: #000; color: #fff; padding: 5px; }
-        .whatsapp-btn { position: fixed; bottom: 20px; right: 20px; background: #25D366; padding: 10px; border-radius: 50%; }
-        .flip-card { perspective: 1000px; width: 100%; height: 250px; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
-        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
-        .flip-card-back { transform: rotateY(180deg); background: #007bff; color: white; padding: 20px; border-radius: 10px; }
-        .qr-section { text-align: center; display: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Premium Admission Form</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <style>
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fadeSlideIn {
+      animation: fadeSlideIn 0.6s ease-in-out forwards;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.3);
+    }
+    .gold-gradient {
+      background: linear-gradient(to right, #fcd34d, #facc15);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
 </head>
-<body ng-controller="MainController">
+<body class="bg-gradient-to-tr from-indigo-50 via-white to-indigo-100 min-h-screen flex items-center justify-center p-6">
+
+  <div id="app" class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 fadeSlideIn">
     
-    <div class="ticker animate__animated animate__fadeInLeft">
-        <marquee>📢 Welcome to Somtex Academy ! Admission Open, Enroll Now ! </marquee>
+    <!-- Header with Logo and Trust Badge -->
+    <div class="flex justify-between items-center mb-8">
+      <img src="https://i.imgur.com/pc8jsuz.png" alt="Logo" class="h-16" />
+      <div class="flex items-center gap-2 text-sm text-green-600 font-semibold">
+        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-4.586l5.293-5.293-1.414-1.414L9 11.586 7.121 9.707 5.707 11.121 9 14.414z" clip-rule="evenodd"/></svg>
+        Trusted & Secure
+      </div>
     </div>
-  
-    <!-- Add this inside your <head> tag -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
-<!-- Add this inside your existing <style> tag -->
-<style>
-    /* Flex container for logo and title */
-    .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: center; /* Centers content */
-        gap: 10px; /* Space between logo and title */
-        padding: 10px 0;
-        flex-wrap: wrap; /* Ensures wrapping on small screens */
-        text-align: center;
-    }
+    <!-- Form Title -->
+    <h1 class="text-4xl font-bold text-center mb-4 text-indigo-800">Apply for Admission</h1>
+    <p class="text-center text-gray-500 mb-8 max-w-md mx-auto">
+      Your future starts here. Complete the form below and we'll be in touch shortly.
+    </p>
 
-    /* Logo styling */
-    .logo {
-        width: 70px; /* Default size */
-        height: 70px;
-        border-radius: 50%; /* Makes it circular */
-        object-fit: cover; /* Ensures proper fit */
-        border: 3px solid white; /* Elegant border */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Professional shadow */
-        transition: transform 0.3s ease-in-out; /* Smooth animation */
-    }
+    <form @submit.prevent="submitForm" class="space-y-6" novalidate>
 
-    .logo:hover {
-        transform: scale(1.1); /* Zoom effect */
-    }
+      <div>
+        <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+        <input v-model="form.name" type="text" id="name" required placeholder="John Doe"
+          class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400" />
+        <p v-if="errors.name" class="text-red-600 text-sm mt-1">{{ errors.name }}</p>
+      </div>
 
-    /* Title styling */
-    .academy-title {
-        font-family: 'Playfair Display', serif; /* Elegant professional font */
-        font-weight: bold;
-        font-style: italic;
-        font-size: 2rem; /* Default size */
-        color: white;
-        white-space: nowrap; /* Prevents wrapping */
-    }
+      <div>
+        <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
+        <input v-model="form.phone" type="tel" id="phone" required placeholder="+1 234 567 890"
+          class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400" />
+        <p v-if="errors.phone" class="text-red-600 text-sm mt-1">{{ errors.phone }}</p>
+      </div>
 
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-        .header-container {
-            flex-direction: column; /* Stack logo & title on small screens */
-            gap: 8px; /* Reduce spacing */
+      <div>
+        <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+        <input v-model="form.email" type="email" id="email" required placeholder="you@example.com"
+          class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400" />
+        <p v-if="errors.email" class="text-red-600 text-sm mt-1">{{ errors.email }}</p>
+      </div>
+
+      <div>
+        <label for="course" class="block text-sm font-semibold text-gray-700 mb-1">Course Interested</label>
+        <input v-model="form.course" type="text" id="course" required placeholder="E.g. Computer Science"
+          class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400" />
+        <p v-if="errors.course" class="text-red-600 text-sm mt-1">{{ errors.course }}</p>
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-semibold text-gray-700 mb-1">Why are you interested?</label>
+        <textarea v-model="form.message" id="message" rows="4" required placeholder="Tell us about yourself..."
+          class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 resize-none"></textarea>
+        <p v-if="errors.message" class="text-red-600 text-sm mt-1">{{ errors.message }}</p>
+      </div>
+
+      <button type="submit" :disabled="loading"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-md transition duration-300 disabled:opacity-60">
+        <span v-if="loading"
+          class="inline-block animate-spin mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+        Submit Application
+      </button>
+    </form>
+
+    <!-- Messages -->
+    <div v-if="successMessage" class="mt-6 text-green-700 bg-green-100 border border-green-300 rounded-xl p-4 text-center font-medium">
+      {{ successMessage }}
+    </div>
+    <div v-if="errorMessage" class="mt-6 text-red-700 bg-red-100 border border-red-300 rounded-xl p-4 text-center font-medium">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-xs text-gray-400 mt-10">
+      &copy; 2025 Premium Academy. All rights reserved.
+    </div>
+  </div>
+
+  <!-- Vue Script (unchanged) -->
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          form: {
+            name: '',
+            phone: '',
+            email: '',
+            course: '',
+            message: ''
+          },
+          errors: {},
+          loading: false,
+          successMessage: '',
+          errorMessage: '',
+          scriptURL: 'https://script.google.com/macros/s/AKfycbyW7sX1hOg1Ivb5RkdR2k4Jw7qNZRt60mh2sRT3MR8SWc3VaSjf-7thOE_xUuW8FXZd9Q/exec'
+        };
+      },
+      methods: {
+        validate() {
+          this.errors = {};
+          if (!this.form.name.trim()) this.errors.name = 'Full Name is required.';
+          if (!this.form.phone.trim()) this.errors.phone = 'Phone Number is required.';
+          else if (!/^\+?[\d\s\-]{7,15}$/.test(this.form.phone.trim())) this.errors.phone = 'Invalid phone number.';
+          if (!this.form.email.trim()) this.errors.email = 'Email is required.';
+          else if (!/^\S+@\S+\.\S+$/.test(this.form.email.trim())) this.errors.email = 'Invalid email address.';
+          if (!this.form.course.trim()) this.errors.course = 'Course Interested is required.';
+          if (!this.form.message.trim()) this.errors.message = 'Message is required.';
+          return Object.keys(this.errors).length === 0;
+        },
+        async submitForm() {
+          if (!this.validate()) return;
+          this.loading = true;
+          this.successMessage = '';
+          this.errorMessage = '';
+          try {
+            const formData = new FormData();
+            formData.append('name', this.form.name);
+            formData.append('phone', this.form.phone);
+            formData.append('email', this.form.email);
+            formData.append('course', this.form.course);
+            formData.append('message', this.form.message);
+
+            const res = await fetch(this.scriptURL, {
+              method: 'POST',
+              body: formData
+            });
+
+            if (!res.ok) throw new Error('Failed to submit');
+
+            this.successMessage = 'Your application has been submitted successfully! We will contact you soon.';
+            this.form.name = '';
+            this.form.phone = '';
+            this.form.email = '';
+            this.form.course = '';
+            this.form.message = '';
+          } catch (err) {
+            this.errorMessage = 'Oops! Something went wrong. Please try again later.';
+            console.error(err);
+          } finally {
+            this.loading = false;
+          }
         }
-
-        .logo {
-            width: 60px; /* Slightly smaller logo */
-            height: 60px;
-        }
-
-        .academy-title {
-            font-size: 1.8rem; /* Adjust font size */
-        }
-    }
-
-    @media (max-width: 480px) {
-        .logo {
-            width: 50px;
-            height: 50px;
-        }
-
-        .academy-title {
-            font-size: 1.6rem;
-        }
-    }
-</style>
-
-<!-- Add this inside your <body> -->
-<div class="container text-center my-3">
-    <div class="header-container">
-        <a href="mailto:somtexacademy@gmail.com">
-            <img src="https://i.imgur.com/uHAyItp.png" alt="Somtex Academy Logo" class="logo">
-        </a>
-        <h1 class="academy-title">SOMTEX ACADEMY</h1>
-    </div>
-</div>
-
- <!-- Mount Vue app -->
-    <div id="app">
-        <!-- Overlay Popup -->
-        <div v-if="showPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border border-yellow-500">
-                <button @click="dismissPopup" class="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
-                <h2 class="text-2xl font-semibold text-blue-900 mb-2">🎓 Ready to Join Us?</h2>
-                <p class="text-gray-700 mb-6">Take the first step toward your future. Fill out the admission form now!</p>
-                <button @click="goToForm" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow-md">
-                    Fill Admission Form
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container text-center my-3">
-        <h2 class="text-3xl">📜 Notice Board </h2>
-        <p>All important announcements will be displayed here.</p>
-        
-    </div>
-    
-    <button class="btn btn-dark position-absolute top-0 end-0 m-3" onclick="toggleDarkMode()">🌙</button>
-    
-    <a href="https://wa.me/7991390381" class="whatsapp-btn text-white">📱</a>
-      
-    
-     <div class="container text-center my-5">
-        <h1 class="text-4xl font-bold animate__animated animate__fadeIn">Meet Our Teachers</h1>
-    </div>
-    
-    <div id="teachers" class="container grid grid-cols-2 md:grid-cols-2 gap-4 text-center">
-
-        <div v-for="teacher in teachers" class="card shadow-lg hover:shadow-xl transition-all">
-            <img :src="teacher.photo" class="rounded-circle mb-3" width="80">
-            <h3 class="text-xl font-semibold">{{ teacher.name }}</h3>
-            <p><strong>Experience:</strong> {{ teacher.experience }} Years</p>
-            <p><strong>Qualification:</strong> {{ teacher.qualification }}</p>
-            <p><strong>Classes taught:</strong> {{ teacher.classes }}</p>
-            <p><strong>Subject taught:</strong> {{ teacher.subject }}</p>
-        </div>
-    </div>
-    
-    <div class="container text-center my-5">
-        <h1 class="text-4xl font-bold animate__animated animate__fadeIn">Star Performers</h1>
-    </div>
-    
-    <div id="students" class="container grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
-        <div v-for="student in students" class="card shadow-lg hover:shadow-xl transition-all">
-            <img :src="student.photo" class="rounded-circle mb-3" width="80">
-            <h3 class="text-xl font-semibold">{{ student.name }}</h3>
-            <p><strong>Class:</strong> {{ student.class }}</p>
-            <p><strong>Board:</strong> {{ student.board }}</p>
-            <p><strong>Remark:</strong> {{ student.remark }}</p>
-        </div>
-    </div>
-    
-    <div class="container text-center my-5">
-        <h1 class="text-4xl font-bold animate__animated animate__fadeIn">Parent Reviews</h1>
-    </div>
-    
-    <div class="container my-5">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="flip-card" v-for="review in reviews">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front card p-4 shadow-lg">
-                        <img :src="review.photo" class="rounded-circle mb-3" width="80">
-                        <h1>Hear From Our Parents</h4>
-                        <h5>------</h1>
-                        <p2>"Somtex Academy has exceeded my expectations. The faculty is knowledgeable and supportive, making sure every student gets the best education." </p2>
-                    </div>
-                    <div class="flip-card-back">
-                        <h1>Words from Our Parents</h1>
-                        <h2>------</h2>
-                        <p>"The best decision we made was enrolling our child at Somtex Academy. The teachers put in tremendous effort to make learning easy and enjoyable. Regular tests and personal attention have helped my child improve significantly." </p5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-
-    <div class="container text-center my-5">
-        <button class="btn btn-danger" onclick="window.location.href='tel:‪7991390381'">📞 Call Us For More Information. </button>
-       
-        <p>Need help? <span onclick="window.location.href='mailto:somtexacademy@gmail.com'" style="cursor:pointer; color:yellow;">Click to Email Us</span></p>
-    </div>
-       <div class="container text-center my-5">
-        <button class="btn btn-danger" onclick="window.location.href='tel:7080528154'">📞 Call for Complaint</button> 
-        
-        <p>To Register Complain [ABOUT STUDENT / FACULTY / FROM STUDENT] <span onclick="window.location.href='mailto:somtexacademy@gmail.com'" style="cursor:pointer; color:yellow;">Click To Raise a Complain </span></p>
-    </div>
-    
-    <div class="container text-center my-5">
-        <button class="btn btn-success" onclick="document.getElementById('qr-section').style.display='block'"> Pay Fees</button>
-        <div id="qr-section" class="qr-section my-3">
-            <img src="https://i.imgur.com/byOH2q3.png" alt="Payment QR Code" width="500">
-            
-<p>                       </p>
-            <p>Scan the QR code to pay from digital payments apps and send a screenshot to provided number.  </p>
-        </div>
- 
-    
-    <!--<div class="my-10 text-center">
-        <h2 class="text-2xl font-semibold mb-4">Inside Somtex Academy</h2>
-        <video controls class="w-full max-w-3xl mx-auto rounded-lg shadow-lg">
-            <source src="your-video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-</div> ---->
-
-<footer class="bg-blue-900 text-white py-4 mt-10 text-center">
-    <p>&copy; Somtex Academy 2025.</p> 
-    <p>All rights reserved.</p>
-</footer>
-
-
-   <!-- Vue Popup Script -->
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                showPopup: false,
-                popupShownCount: parseInt(localStorage.getItem('popupShownCount') || '0'),
-            },
-            methods: {
-                showDelayedPopup() {
-                    if (this.popupShownCount < 2) {
-                        this.showPopup = true;
-                    }
-                },
-                dismissPopup() {
-                    this.popupShownCount++;
-                    localStorage.setItem('popupShownCount', this.popupShownCount);
-                    this.showPopup = false;
-                    if (this.popupShownCount < 2) {
-                        setTimeout(this.showDelayedPopup, 30000);
-                    }
-                },
-                goToForm() {
-                    localStorage.setItem('popupShownCount', 2);
-                    window.location.href = 'admission-form.html';
-                }
-            },
-            mounted() {
-                setTimeout(this.showDelayedPopup, 20000);
-            }
-        });
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('bg-dark');
-            document.body.classList.toggle('text-white');
-        }
-    </script>
-
-    <script>
-        function toggleDarkMode() {
-          document.body.classList.toggle('bg-dark');
-           document.body.classList.toggle('text-white');
-        }
-        
-  
-        new Vue({
-        el: '#students',
-        data: {
-            students: [
-                { name: "Virat Tiwari", class: "V", board: "CBSE", remark: "Hardworking", photo: "https://i.imgur.com/Vw4fSnt.png" },
-                { name: "Ansh Maurya", class: "VI", board: "ICSE", remark: "Best Performance", photo: "https://i.imgur.com/jxyKrBs.png" },
-                { name: "Chandani", class: "VII", board: "ICSE", remark: "Hardworking", photo: "https://i.imgur.com/QQEJbCk.png" },
-                { name: "Anirudh Verma", class: "VII", board: "ICSE", remark: "Innovative Mind", photo: "https://i.imgur.com/OZdD1gb.png" },
-                { name: "Anshuman Bajpai", class: "VII", board: "ICSE", remark: "Outstanding", photo: "https://i.imgur.com/vK3tkXq.png" },
-                { name: "Ammar Ansari", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/M66vwSM.png" },
-                { name: "Piyush Mishra", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/LFSmn8C.png" },
-                { name: "Shivansh Sharma", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/cr7AwoU.png" },
-                { name: "Anshika Gautam", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/m8w1ADS.png" },
-                { name: "Arpit Yadav", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/IbyRn8M.jpeg" },
-                { name: "Adarsh Kumar Singh", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/XJL0wtq.png" },
-                { name: "Shivendra Tripathi", class: "X", board: "ICSE", remark: "Excellent Performance", photo: "https://i.imgur.com/nn8vCsN.jpeg" },
-                { name: "Raj Ranjan", class: "XI", board: "CBSE", remark: "Excellent Performance", photo: "https://i.imgur.com/q45vKho.png" },
-                { name: "Ritesh Kumar", class: "XI", board: "CBSE", remark: "Excellent Performance", photo: "https://i.imgur.com/gdygczX.png" },
-                 { name: "Hariom Gupta", class: "VIII", board: "CBSE", remark: "Excellent Performance", photo: "https://i.imgur.com/JDQkU28.png" },
-                { name: "Aditya Kumar", class: "X", board: "CBSE", remark: "Excellent Performance", photo: "https://i.imgur.com/fl4lNWX.png" },
-                { name: "Vimal Upadhyay", class: "XI", board: "CBSE", remark: "Excellent Performance", photo: "https://i.imgur.com/XNTwk7M.png" },
-               // { name: "Deepak Chauhan", class: "6th", board: "ICSE", remark: "Mathematical Genius", photo: "deepak.jpg" },
-                { name: "Vaishali Tripathi", class: "B.SC", remark: "Highly Motivated", photo: "https://i.imgur.com/uJQp320.png" },
-                { name: "Shalini Kumari", class: "XII", board: "UP", remark: "Highly Motivated", photo: "https://i.imgur.com/ea4hfZv.png" },
-              // { name: "Hariom Gupta", class: "VIII", board: "CBSE", remark: "Creative Thinker", photo: "sanya.jpg" },
-                { name: "Mahima Singh", class: "B.Sc [III Y]", board: "ICSE", remark: "Highly Motivated", photo: "https://i.imgur.com/mXDMd9T.png" },
-               // { name: "Ritesh Kumar", class: "X", board: "UP", remark: "Leader", photo: "simran.jpg" },
-                // { name: "User", class: "7th", board: "CBSE", remark: "Best Speaker", photo: "gaurav.jpg" },
-                // { name: "Meenal Jain", class: "6th", board: "ICSE", remark: "Hardworking", photo: "meenal.jpg" },
-               // { name: "Userrrr", class: "9th", board: "CBSE", remark: "Innovative Mind", photo: "anirudh.jpg" }
-            ]
-        }
-    });
-
-        new Vue({
-        el: '#teachers',
-        data: {
-            teachers: [
-                { name: "Deepak Kumar Gupta", experience: 5, qualification: "Master of Computer Applications", classes: "Software Development, Java, Python, C++, .NET, O Level, CCC, DCA, ADCA, B.Tech, MCA, BCA.", subject: "Programming Langauges and Computer & Technology", photo: "https://i.imgur.com/7zPSpLY.jpeg" },
-                { name: "Vipin Sharma", experience: 4, qualification: "M.Tech in Computer Science", classes: " Specializing in Software Development, React.js, Data Science, Artificial Intelligence (AI), Data Analytics, Data Structures, PHP, MySQL", subject: "Computer Science", photo: "https://i.imgur.com/VlazN4c.png" },
-                { name: "Abhishek Maurya", experience: 5, qualification: "B.Sc. in Mathematics and Pursuing MCA (Master of Computer Applications)", classes: "IX-XII", subject: "Mathematics", photo: "https://i.imgur.com/gUoI6Mt.png" },
-                // { name: "Vaibhav Shukla", experience: 2, qualification: "Bachelor of Education in Mathematics", classes: "IX-XII", subject: "Physics and Mathematics ", photo: "pi.png" },
-                //{ name: "Surendra Pal Singh", experience: 14, qualification: "Ph.D.", classes: "IX-XII", subject: "Biology and Chemistry", photo: "is.jpg" },
-                //{ name: "Khusboo ", experience: 22, qualification: "M.Sc. Biology", classes: "11-12", subject: "Biology", photo: "pankaj.jpg" },
-                //{ name: "Commerce Teacher", experience: 8, qualification: "M.A. Hindi", classes: "6-10", subject: "Hindi", photo: "sonal.jpg" }
-                
-            ]
-        }
-    });
-</script>
+      }
+    }).mount('#app');
+  </script>
 </body>
 </html>
-
-<!-- Vue.js -->
-<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
-
-<script>
-    // 🚫 Disable Right Click, Inspect Element, and View Source
-    document.addEventListener("contextmenu", event => event.preventDefault());
-    document.addEventListener("keydown", event => {
-        if (
-            event.key === "F12" || 
-            (event.ctrlKey && event.shiftKey && event.key === "I") || 
-            (event.ctrlKey && event.key === "U") || 
-            (event.ctrlKey && event.shiftKey && event.key === "C")
-        ) {
-            event.preventDefault();
-        }
-    });
-
-    // 🛡 Prevent Copy, Cut, Paste & Drag
-    ["copy", "cut", "paste", "dragstart"].forEach(event => {
-        document.addEventListener(event, e => e.preventDefault());
-    });
-
-    // 🚀 Advanced Bot & Spam Protection
-    let requestAttempts = 0;
-    setInterval(() => { requestAttempts = 0; }, 30000); // Reset every 30 sec
-
-    document.addEventListener("mousemove", () => { requestAttempts++; });
-    document.addEventListener("keydown", () => { requestAttempts++; });
-
-    if (requestAttempts > 50) { 
-        alert("⚠ Too many suspicious actions! You are blocked.");
-        document.body.innerHTML = ""; // Hide website content
-    }
-
-    // 🔥 Detect DevTools Open & Block Access
-    setInterval(function() {
-        var before = new Date().getTime();
-        debugger;
-        var after = new Date().getTime();
-        if (after - before > 10) {
-            document.body.innerHTML = "<h1 style='text-align:center;color:red;'>Access Denied!</h1>";
-        }
-    }, 1000);
-
-    // 🛡 Prevent XSS (Cross-Site Scripting) Attacks
-    document.addEventListener("input", function(event) {
-        if (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA") {
-            event.target.value = event.target.value.replace(/[<>`"'&]/g, '');
-        }
-    });
-
-    // 🚀 Vue.js Secure App
-    const app = Vue.createApp({
-        data() {
-            return { message: "Your website is fully secured & works offline!" };
-        },
-        methods: {
-            showMessage() {
-                alert("Hello, Vue is running securely!");
-            }
-        }
-    });
-    app.mount("#app");
-
-
-    // ⚡ Super Strong Offline Mode (Caches Everything)
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register(URL.createObjectURL(new Blob([`
-            const CACHE_NAME = "secure-site-cache-v3";
-            self.addEventListener("install", event => {
-                event.waitUntil(
-                    caches.open(CACHE_NAME).then(cache => {
-                        return cache.addAll(["/", window.location.href]);
-                    })
-                );
-            });
-
-            self.addEventListener("fetch", event => {
-                event.respondWith(
-                    caches.match(event.request).then(response => response || fetch(event.request))
-                );
-            });
-
-            self.addEventListener("activate", event => {
-                event.waitUntil(
-                    caches.keys().then(cacheNames => {
-                        return Promise.all(
-                            cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
-                                .map(cacheName => caches.delete(cacheName))
-                        );
-                    })
-                );
-            });
-        `], { type: "application/javascript" })));
-    }
-</script>
-        
