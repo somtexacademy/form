@@ -1,156 +1,148 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="SomtexAcademy">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somtex Academy</title>
-    
-    <link rel="icon" type="image/x-icon" href="https://i.imgur.com/pc8jsuz.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0052cc; color: white; }
-        .card { background: white; color: black; border-radius: 10px; padding: 20px; }
-        .ticker { white-space: nowrap; overflow: hidden; background: #000; color: #fff; padding: 5px; }
-        .whatsapp-btn { position: fixed; bottom: 20px; right: 20px; background: #25D366; padding: 10px; border-radius: 50%; }
-        .flip-card { perspective: 1000px; width: 100%; height: 250px; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
-        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
-        .flip-card-back { transform: rotateY(180deg); background: #007bff; color: white; padding: 20px; border-radius: 10px; }
-        .qr-section { text-align: center; display: none; }
-        .header-container {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 10px 0; flex-wrap: wrap; text-align: center;
-        }
-        .logo {
-            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
-            border: 3px solid white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out;
-        }
-        .logo:hover { transform: scale(1.1); }
-        .academy-title {
-            font-family: 'Playfair Display', serif; font-weight: bold;
-            font-style: italic; font-size: 2rem; color: white;
-            white-space: nowrap;
-        }
-        @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 8px; }
-            .logo { width: 60px; height: 60px; }
-            .academy-title { font-size: 1.8rem; }
-        }
-        @media (max-width: 480px) {
-            .logo { width: 50px; height: 50px; }
-            .academy-title { font-size: 1.6rem; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Somtex Academy</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+    header {
+      padding: 1rem;
+      background: #4caf50;
+      color: white;
+      text-align: center;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 1rem;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-height: 50vh;
+      background: white;
+      border-top: 2px solid #ccc;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      z-index: 1000;
+      display: none;
+      overflow-y: auto;
+    }
+
+    .popup.dark-mode {
+      background-color: #2c2c2c;
+      color: white;
+      border-color: #444;
+    }
+
+    .popup-header {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .dark-mode-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #222;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .popup {
+        max-height: 60vh;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="ticker animate__animated animate__fadeInLeft">
-        <marquee>📢 Welcome to Somtex Academy ! Admission Open, Enroll Now ! </marquee>
+  <header>
+    <h1>Somtex Academy</h1>
+  </header>
+
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+
+  <div class="buttons">
+    <button onclick="callNow()">📞 Call Now</button>
+    <button onclick="emailNow()">📧 Email</button>
+    <button onclick="showPopup()">💰 Pay Now</button>
+  </div>
+
+  <div id="paymentPopup" class="popup">
+    <div class="popup-header">
+      <button class="close-btn" onclick="hidePopup()">×</button>
     </div>
+    <h2>Payment Options</h2>
+    <p>Use the following method to pay:</p>
+    <ul>
+      <li>UPI: somtex@upi</li>
+      <li>Bank Transfer: Acc No: 1234567890, IFSC: SOMT0001</li>
+    </ul>
+  </div>
 
-    <div class="container text-center my-3">
-        <div class="header-container">
-            <a href="mailto:somtexacademy@gmail.com">
-                <img src="https://i.imgur.com/uHAyItp.png" alt="Somtex Academy Logo" class="logo">
-            </a>
-            <h1 class="academy-title">SOMTEX ACADEMY</h1>
-        </div>
-    </div>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      document.getElementById("paymentPopup").classList.toggle("dark-mode");
+    }
 
-    <!-- Mount Vue app -->
-    <div id="app">
-        <!-- Overlay Popup -->
-        <div v-if="showPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border border-yellow-500">
-                <button @click="dismissPopup" class="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
-                <h2 class="text-2xl font-semibold text-blue-900 mb-2">🎓 Ready to Join Us?</h2>
-                <p class="text-gray-700 mb-6">Take the first step toward your future. Fill out the admission form now!</p>
-                <button @click="goToForm" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow-md">
-                    Fill Admission Form
-                </button>
-            </div>
-        </div>
-    </div>
+    function callNow() {
+      window.location.href = "tel:+911234567890";
+    }
 
-    <div class="container text-center my-3">
-        <h2 class="text-3xl">📜 Notice Board </h2>
-        <p>All important announcements will be displayed here.</p>
-    </div>
+    function emailNow() {
+      window.location.href = "mailto:support@somtexacademy.com";
+    }
 
-    <button class="btn btn-dark position-absolute top-0 end-0 m-3" onclick="toggleDarkMode()">🌙</button>
-    <a href="https://wa.me/7991390381" class="whatsapp-btn text-white">📱</a>
+    function showPopup() {
+      document.getElementById("paymentPopup").style.display = "block";
+    }
 
-    <div class="container text-center my-5">
-        <button class="btn btn-danger" onclick="window.location.href='tel:7991390381'">📞 Call Us For More Information</button>
-        <p>Need help? <span onclick="window.location.href='mailto:somtexacademy@gmail.com'" style="cursor:pointer; color:yellow;">Click to Email Us</span></p>
-    </div>
-
-    <div class="container text-center my-5">
-        <button class="btn btn-danger" onclick="window.location.href='tel:7080528154'">📞 Call for Complaint</button>
-        <p>To Register Complaint <span onclick="window.location.href='mailto:somtexacademy@gmail.com'" style="cursor:pointer; color:yellow;">Click To Raise a Complaint</span></p>
-    </div>
-
-    <a href="login.html">
-        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition duration-300">
-            Admission Form
-        </button>
-    </a>
-
-    <div class="container text-center my-5">
-        <button class="btn btn-success" onclick="document.getElementById('qr-section').style.display='block'">Pay Fees</button>
-        <div id="qr-section" class="qr-section my-3">
-            <img src="https://i.imgur.com/byOH2q3.png" alt="Payment QR Code" width="500">
-            <p>Scan the QR code to pay from digital payment apps and send a screenshot to the provided number.</p>
-        </div>
-    </div>
-
-    <footer class="bg-blue-900 text-white py-4 mt-10 text-center">
-        <p>&copy; Somtex Academy 2025. All rights reserved.</p>
-    </footer>
-
-    <!-- Vue Popup Script -->
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                showPopup: false,
-                popupShownCount: parseInt(localStorage.getItem('popupShownCount') || '0'),
-            },
-            methods: {
-                showDelayedPopup() {
-                    if (this.popupShownCount < 2) {
-                        this.showPopup = true;
-                    }
-                },
-                dismissPopup() {
-                    this.popupShownCount++;
-                    localStorage.setItem('popupShownCount', this.popupShownCount);
-                    this.showPopup = false;
-                    if (this.popupShownCount < 2) {
-                        setTimeout(this.showDelayedPopup, 30000);
-                    }
-                },
-                goToForm() {
-                    localStorage.setItem('popupShownCount', 2);
-                    window.location.href = 'admission-form.html';
-                }
-            },
-            mounted() {
-                setTimeout(this.showDelayedPopup, 20000);
-            }
-        });
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('bg-dark');
-            document.body.classList.toggle('text-white');
-        }
-    </script>
+    function hidePopup() {
+      document.getElementById("paymentPopup").style.display = "none";
+    }
+  </script>
 </body>
 </html>
