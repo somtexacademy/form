@@ -161,30 +161,51 @@
       },
       methods: {
         validate() {
-  this.errors = {};
-
-  // Name
-  if (!this.form.name.trim()) this.errors.name = 'Full Name is required.';
-
-  // Phone
-  const phone = this.form.phone.trim();
-  if (!phone) this.errors.phone = 'Phone Number is required.';
-  else if (!/^\d{10}$/.test(phone)) this.errors.phone = 'Phone must be exactly 10 digits.';
-
-  // Email
-  const email = this.form.email.trim();
-  if (!email) this.errors.email = 'Email is required.';
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) this.errors.email = 'Enter a valid email like name@gmail.com';
-
-  // Course
-  if (!this.form.course.trim()) this.errors.course = 'Course Interested is required.';
-
-  // Message
-  if (!this.form.message.trim()) this.errors.message = 'Message is required.';
-
-  return Object.keys(this.errors).length === 0;
-}
-
+          this.errors = {};
+          if (!this.form.name.trim()) this.errors.name = 'Full Name is required.';
+          if (!this.form.phone.trim()) this.errors.phone = 'Phone Number is required.';
+          else if (!/^\+?[\d\s\-]{7,15}$/.test(this.form.phone.trim())) this.errors.phone = 'Invalid phone number.';
+          if (!this.form.email.trim()) this.errors.email = 'Email is required.';
+          else if (!/^\S+@\S+\.\S+$/.test(this.form.email.trim())) this.errors.email = 'Invalid email address.';
+          if (!this.form.course.trim()) this.errors.course = 'Course Interested is required.';
+          if (!this.form.message.trim()) this.errors.message = 'Message is required.';
+          return Object.keys(this.errors).length === 0;
+        },
+        async submitForm() {
+          if (!this.validate()) return;
+          this.loading = true;
+          this.successMessage = '';
+          this.errorMessage = '';
+          try {
+            const formData = new FormData();
+            formData.append('name', this.form.name);
+            formData.append('phone', this.form.phone);
+            formData.append('email', this.form.email);
+            formData.append('course', this.form.course);
+            formData.append('message', this.form.message);
+            
+            const res = await fetch(this.scriptURL, {
+              method: 'POST',
+              body: formData
+            });
+            
+            if (!res.ok) throw new Error('Failed to submit');
+            
+            this.successMessage = 'Your application has been submitted successfully! We will contact you soon.';
+            this.form.name = '';
+            this.form.phone = '';
+            this.form.email = '';
+            this.form.course = '';
+            this.form.message = '';
+          } catch (err) {
+            this.errorMessage = 'Oops! Something went wrong. Please try again later.';
+            console.error(err);
+          } finally {
+            this.loading = false;
+          }
+        }
+      }
+    }).mount('#app');
   </script>
 </body>
 </html>
